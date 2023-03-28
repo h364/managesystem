@@ -1,11 +1,15 @@
 package com.hh.springboot.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.hh.springboot.common.Result;
 import com.hh.springboot.entity.User;
+import com.hh.springboot.service.Dto.UserDTO;
 import com.hh.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -15,27 +19,42 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @PostMapping("/login")
+    public Result login(@RequestBody UserDTO userDTO) {
+        return userService.login(userDTO);
+    }
+
     @GetMapping("/page")
-    public IPage<User> findPage(@RequestParam int pageNum,
-                                @RequestParam int pageSize,
-                                @RequestParam(defaultValue = "") String username,
-                                @RequestParam(defaultValue = "") String email,
-                                @RequestParam(defaultValue = "") String address) {
+    public Result findPage(@RequestParam int pageNum,
+                           @RequestParam int pageSize,
+                           @RequestParam(defaultValue = "") String username,
+                           @RequestParam(defaultValue = "") String email,
+                           @RequestParam(defaultValue = "") String address) {
         return userService.pageQuery(pageNum, pageSize, username, email, address);
     }
 
     @PostMapping("/save")
-    public boolean save(@RequestBody User user) {
+    public Result save(@RequestBody User user) {
         return userService.insertUser(user);
     }
 
     @PostMapping("/delete")
-    public boolean delete(@RequestBody User user) {
+    public Result delete(@RequestBody User user) {
         return userService.deleteById(user);
     }
 
     @PostMapping("/delete/batch")
-    public boolean deleteBatch(@RequestBody List<Integer> ids) {
+    public Result deleteBatch(@RequestBody List<Integer> ids) {
         return userService.deleteBatch(ids);
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) {
+        userService.handleExport(response);
+    }
+
+    @PostMapping("/import")
+    public void imp(MultipartFile file) {
+        userService.handleImp(file);
     }
 }

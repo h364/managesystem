@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -20,6 +22,5 @@ public class User {
     private String email;
     private String phone;
     private String address;
-
-
+    private String avatar;
 }
