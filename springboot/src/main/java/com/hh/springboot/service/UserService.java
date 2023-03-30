@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hh.springboot.common.Result;
 import com.hh.springboot.entity.User;
 import com.hh.springboot.mapper.UserMapper;
-import com.hh.springboot.service.Dto.UserDTO;
+import com.hh.springboot.service.DTO.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,6 +113,19 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             return new Result(Result.CODE_200, "", userDTO);
         } else {
             return new Result(Result.CODE_500, "用户名或密码错误", null);
+        }
+    }
+
+    public Result registry(UserDTO userDTO) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", userDTO.getUsername());
+        User one = getOne(wrapper);
+        if (one != null) {
+            return new Result(Result.CODE_500, "用户已存在", null);
+        } else {
+            User user = new User();
+            BeanUtils.copyProperties(userDTO, user);
+            return insertUser(user);
         }
     }
 }

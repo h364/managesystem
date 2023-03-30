@@ -1,9 +1,8 @@
 package com.hh.springboot.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hh.springboot.common.Result;
 import com.hh.springboot.entity.User;
-import com.hh.springboot.service.Dto.UserDTO;
+import com.hh.springboot.service.DTO.UserDTO;
 import com.hh.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,11 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody UserDTO userDTO) {
         return userService.login(userDTO);
+    }
+
+    @PostMapping("/registry")
+    public Result registry(@RequestBody UserDTO userDTO) {
+        return userService.registry(userDTO);
     }
 
     @GetMapping("/page")
