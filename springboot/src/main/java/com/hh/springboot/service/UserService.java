@@ -4,11 +4,13 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hh.springboot.common.Result;
+import com.hh.springboot.common.utils.JWTUtils;
 import com.hh.springboot.entity.User;
 import com.hh.springboot.mapper.UserMapper;
 import com.hh.springboot.service.DTO.UserDTO;
@@ -41,8 +43,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         if (!"".equals(address)) {
             wrapper.like("address", address);
         }
-        IPage<User> iPagepage = new Page<>(pageNum, pageSize);
-        return new Result(Result.CODE_200, "", page(iPagepage, wrapper));
+        IPage<User> pages = new Page<>(pageNum, pageSize);
+        return new Result(Result.CODE_200, "", page(pages, wrapper));
     }
 
     public Result insertUser(User user) {
@@ -110,6 +112,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         User one = getOne(wrapper);
         if (one != null) {
             BeanUtils.copyProperties(one, userDTO);
+            userDTO.setToken(JWTUtils.createToken(one.getId().toString(), one.getPassword()));
             return new Result(Result.CODE_200, "", userDTO);
         } else {
             return new Result(Result.CODE_500, "用户名或密码错误", null);
@@ -126,6 +129,16 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             User user = new User();
             BeanUtils.copyProperties(userDTO, user);
             return insertUser(user);
+        }
+    }
+
+    public Result getUser(UserDTO userDTO) {
+        String userId = JWT.decode(userDTO.getToken()).getAudience().get(0);
+        User user = getById(userId);
+        if (user != null) {
+            return new Result(Result.CODE_200, "", user);
+        } else {
+            return new Result(Result.CODE_500, "系统错误", null);
         }
     }
 }

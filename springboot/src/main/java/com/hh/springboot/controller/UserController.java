@@ -61,4 +61,9 @@ public class UserController {
     public void imp(MultipartFile file) {
         userService.handleImp(file);
     }
+
+    @PostMapping("/getUser")
+    public Result getUser(@RequestBody UserDTO userDTO) {
+        return userService.getUser(userDTO);
+    }
 }

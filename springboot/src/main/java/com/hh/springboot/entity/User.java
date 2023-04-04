@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +25,5 @@ public class User {
     private String phone;
     private String address;
     private String avatar;
+    private Date createTime;
 }
