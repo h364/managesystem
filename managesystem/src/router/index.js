@@ -26,7 +26,9 @@ const routes = [
     component: () => import('../views/Manage.vue'),
     children: [
       { path: 'user', component: () => import('../views/User.vue') },
-      { path: 'home', component: () => import('../views/Home.vue') }
+      { path: 'home', component: () => import('../views/Home.vue') },
+      { path: 'file', component: () => import('../views/File.vue') },
+      { path: 'person', component: () => import('../views/Person.vue') }
     ]
   }
 ]

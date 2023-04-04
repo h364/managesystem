@@ -36,8 +36,13 @@
                 this.$emit("collapse")
             },
             handleCommand(command) {
-                if (command == 'exit')
+                if (command == 'exit') {
                     this.$router.push("/")
+                    localStorage.removeItem("user")
+                }else if(command == 'personality') {
+                    this.$router.push("/manage/person")
+                }
+
             }
         }
     }
@@ -45,8 +50,8 @@
 
 <style scoped>
     .avatar img {
-        width: 38px;
+        width: 35px;
         vertical-align: middle;
-        border-radius: 5px;
+        border-radius: 100%;
     }
 </style>
